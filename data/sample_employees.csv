@@ -1,0 +1,21 @@
+EmployeeID,Name,Department,Role,Salary,ExperienceYears,PerformanceScore,ProjectsCompleted,RemoteWork,Education,JoinDate
+101,Alex Johnson,Engineering,Software Engineer,85000,4.5,88,12,Yes,Bachelor,2021-03-15
+102,Brenda Vance,Marketing,Marketing Lead,72000,6.0,91,18,No,Master,2019-07-01
+103,Carlos Diaz,Engineering,Senior Developer,110000,8.0,95,24,Yes,Master,2018-01-10
+104,Diana Prince,Sales,Account Executive,65000,3.0,78,9,No,Bachelor,2022-05-20
+105,Evan Wright,Engineering,DevOps Engineer,92000,5.5,84,15,Yes,,2020-11-12
+106,Fiona Gallagher,HR,HR Manager,68000,7.0,,10,No,Master,2017-09-01
+107,George Clark,Finance,Financial Analyst,78000,4.0,82,11,No,Bachelor,2021-08-16
+108,Hannah Abbott,Marketing,Content Specialist,58000,2.5,75,8,Yes,Bachelor,2023-02-01
+109,Ian Malcolm,Engineering,Data Scientist,105000,5.0,92,16,,Doctorate,2020-04-15
+110,Julia Roberts,Sales,Sales Manager,89000,9.0,89,22,No,Master,2016-12-05
+111,Kevin Bacon,Engineering,Junior Developer,62000,1.5,79,6,Yes,Bachelor,2023-06-10
+112,Laura Croft,Finance,Senior Accountant,88000,6.5,87,14,No,Master,2019-10-22
+113,Michael Scott,Sales,Regional Manager,75000,10.0,70,19,No,High School,2015-04-01
+114,Nina Patel,Engineering,Software Engineer,87000,,86,13,Yes,Master,2021-01-18
+115,Oscar Martinez,Finance,Accountant,71000,5.0,85,12,No,Bachelor,2020-09-14
+116,Pam Beesly,HR,HR Coordinator,52000,3.0,80,7,Yes,Bachelor,2022-03-01
+117,Quentin Tarantino,Marketing,Creative Director,98000,11.0,94,25,No,Bachelor,2016-05-11
+118,Rachel Green,Sales,Sales Associate,54000,2.0,76,8,No,,2023-01-15
+119,Steve Rogers,Engineering,Tech Lead,125000,9.5,97,28,Yes,Master,2017-08-20
+120,Tina Turner,Marketing,Brand Strategist,81000,6.0,88,14,Yes,Master,2020-02-10
