@@ -83,6 +83,39 @@ CUSTOM_CSS = """
         color: #C7D2FE;
         border: 1px solid #4338CA;
     }
+    /* Sidebar polish */
+    .stSidebar {
+        background-color: #1A1E29;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        padding: 15px;
+    }
+    .stSidebar button {
+        border-radius: 8px;
+        background-color: #6366F1 !important;
+        color: #F3F4F6 !important;
+    }
+    .stSidebar button:hover {
+        box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+    }
+    /* Tab header polish */
+    .stTabs button {
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        color: #9CA3AF !important;
+    }
+    .stTabs button[aria-selected="true"] {
+        color: #818CF8 !important;
+        border-bottom: 2px solid #818CF8 !important;
+    }
+    /* AI chat panel wrapper */
+    .ai-chat-panel {
+        background-color: #1A1E29;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 10px;
+    }
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
@@ -390,6 +423,7 @@ def main():
         st.caption("Type a question about rows, averages, maximums, missing values, or correlations. The local analyzer generates answers and insights instantly without requiring an API key.")
 
         # Quick Suggestion Chips
+        st.markdown('<div class="ai-chat-panel">', unsafe_allow_html=True)
         st.write("**Quick Prompts:**")
         chip_cols = st.columns(4)
         
@@ -455,7 +489,7 @@ def main():
                 st.markdown("#### ❓ Suggested Follow-Up Questions")
                 for sq in res["suggested_questions"]:
                     st.markdown(f"- `{sq}`")
-
+st.markdown('</div>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
