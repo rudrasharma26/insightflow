@@ -4,6 +4,10 @@ An interactive Streamlit dashboard for exploring CSV datasets through automated 
 
 [Live Demo](https://insightflow-csv-explorer.streamlit.app/) | [GitHub Repository](https://github.com/rudrasharma26/insightflow)
 
+## Dashboard Preview
+
+![AI-Powered CSV Data Explorer](assets/dashboard.png)
+
 ## Features
 
 - Upload and explore CSV datasets
