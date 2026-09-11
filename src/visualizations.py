@@ -10,13 +10,13 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
-# Common dark layout styling
+# Common dark SaaS layout styling
 DARK_LAYOUT = dict(
     template="plotly_dark",
-    paper_bgcolor="rgba(26, 30, 41, 0.7)",
-    plot_bgcolor="rgba(14, 17, 23, 0.9)",
-    font=dict(color="#F3F4F6", family="sans-serif"),
-    margin=dict(l=40, r=40, t=50, b=40),
+    paper_bgcolor="rgba(18, 23, 33, 0.6)",
+    plot_bgcolor="rgba(10, 13, 18, 0.8)",
+    font=dict(color="#E2E8F0", family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", size=12),
+    margin=dict(l=45, r=35, t=55, b=45),
 )
 
 
