@@ -47,23 +47,39 @@ COLOR_SEQUENCE = [
 
 
 def _apply_light_theme(fig: go.Figure) -> go.Figure:
-    """Apply consistent light gridlines, axis colors, and layout."""
-    fig.update_layout(**LIGHT_LAYOUT)
+    """Apply consistent light gridlines, axis colors, and high-contrast typography."""
+    fig.update_layout(
+        **LIGHT_LAYOUT,
+        title_font=dict(color="#0F172A", size=14, family="Inter, -apple-system, sans-serif"),
+        legend=dict(
+            font=dict(color="#0F172A", size=11, family="Inter, -apple-system, sans-serif"),
+            title_font=dict(color="#0F172A", size=11, family="Inter, -apple-system, sans-serif"),
+            bgcolor="rgba(255, 255, 255, 0.85)",
+            bordercolor="#E2E8F0",
+            borderwidth=1,
+        ),
+    )
     fig.update_xaxes(
         showgrid=True,
         gridcolor="#E2E8F0",
         linecolor="#CBD5E1",
         zerolinecolor="#CBD5E1",
-        tickfont=dict(color="#475569", size=11),
-        title_font=dict(color="#0F172A", size=12, weight="bold"),
+        tickfont=dict(color="#334155", size=11, family="Inter, -apple-system, sans-serif"),
+        title_font=dict(color="#0F172A", size=12, family="Inter, -apple-system, sans-serif"),
     )
     fig.update_yaxes(
         showgrid=True,
         gridcolor="#E2E8F0",
         linecolor="#CBD5E1",
         zerolinecolor="#CBD5E1",
-        tickfont=dict(color="#475569", size=11),
-        title_font=dict(color="#0F172A", size=12, weight="bold"),
+        tickfont=dict(color="#334155", size=11, family="Inter, -apple-system, sans-serif"),
+        title_font=dict(color="#0F172A", size=12, family="Inter, -apple-system, sans-serif"),
+    )
+    fig.update_coloraxes(
+        colorbar=dict(
+            tickfont=dict(color="#334155", size=10, family="Inter, -apple-system, sans-serif"),
+            title_font=dict(color="#0F172A", size=11, family="Inter, -apple-system, sans-serif"),
+        )
     )
     return fig
 
@@ -147,9 +163,9 @@ def plot_correlation_heatmap(
         zmin=-1,
         zmax=1,
     )
-    fig.update_layout(**LIGHT_LAYOUT)
-    fig.update_xaxes(tickfont=dict(color="#0F172A", size=11, weight="bold"))
-    fig.update_yaxes(tickfont=dict(color="#0F172A", size=11, weight="bold"))
+    fig = _apply_light_theme(fig)
+    fig.update_xaxes(tickfont=dict(color="#0F172A", size=11, family="Inter, -apple-system, sans-serif"))
+    fig.update_yaxes(tickfont=dict(color="#0F172A", size=11, family="Inter, -apple-system, sans-serif"))
     return fig
 
 

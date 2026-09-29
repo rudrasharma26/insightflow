@@ -305,7 +305,17 @@ def get_data_quality_report(df: pd.DataFrame) -> Dict[str, Any]:
     duplicate_rows = int(df.duplicated().sum())
     duplicate_pct = round((duplicate_rows / total_rows) * 100, 2) if total_rows > 0 else 0.0
 
-    constant_cols = [c for c in df.columns if df[c].nunique(dropna=False) <= 1]
+    constant_cols = []
+    for c in df.columns:
+        clean_s = df[c].dropna()
+        if len(clean_s) > 0 and clean_s.nunique() <= 1:
+            constant_cols.append(c)
+        elif len(clean_s) > 1 and pd.api.types.is_numeric_dtype(clean_s):
+            try:
+                if np.isclose(float(clean_s.std(ddof=0)), 0.0, atol=1e-12):
+                    constant_cols.append(c)
+            except Exception:
+                pass
 
     # Calculate overall health score (0 to 100)
     # Starts at 100, penalized by missingness and duplicate rate
@@ -320,16 +330,18 @@ def get_data_quality_report(df: pd.DataFrame) -> Dict[str, Any]:
         u_cnt = int(df[col].nunique())
         u_pct = round((u_cnt / total_rows) * 100, 1) if total_rows > 0 else 0.0
 
-        if m_cnt == 0 and u_cnt > 1:
+        if total_rows == 0 or u_cnt == 0:
+            status = "Empty (100% Missing)"
+        elif col in constant_cols:
+            status = "Constant (Zero Variance)"
+        elif m_cnt == 0:
             status = "Excellent"
-        elif m_pct < 5.0 and u_cnt > 1:
+        elif m_pct < 5.0:
             status = "Good (<5% missing)"
         elif m_pct < 20.0:
             status = "Moderate (5-20% missing)"
-        elif m_pct >= 20.0:
-            status = "High Missing (>20%)"
         else:
-            status = "Constant Value"
+            status = "High Missing (>20%)"
 
         audit_rows.append({
             "Column": col,
