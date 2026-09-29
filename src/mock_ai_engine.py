@@ -48,6 +48,7 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
                 "How many rows are in the dataset?",
                 "What columns are available?",
             ],
+            "evidence_cols": [],
         }
 
     q = query.strip().lower()
@@ -76,7 +77,7 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
             "Which column has the highest missing values?",
             "Give me an executive summary of this dataset.",
         ]
-        return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested}
+        return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested, "evidence_cols": all_cols[:4]}
 
     # 2. Column names / list
     if any(k in q for k in ["what columns", "list columns", "column names", "all columns", "which columns"]):
@@ -91,7 +92,7 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
             "Which column has missing values?",
             "What is the correlation between numeric columns?",
         ]
-        return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested}
+        return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested, "evidence_cols": all_cols}
 
     # 3. Missing values analysis
     if any(k in q for k in ["missing", "null", "nan", "na ", "empty", "incomplete", "unfilled"]):
@@ -104,6 +105,7 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
                 "100% data completeness across all fields.",
                 "No imputation or null-value handling is required for modeling or charting.",
             ]
+            ev_cols = all_cols[:3]
         else:
             top_missing_col = cols_with_missing.idxmax()
             top_missing_val = cols_with_missing.max()
@@ -122,12 +124,13 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
                 f"Column with the most missing data is **`{top_missing_col}`** with {top_missing_val} missing entries ({top_missing_pct}%).",
                 f"{len(all_cols) - len(cols_with_missing)} out of {total_cols} columns are completely full.",
             ]
+            ev_cols = list(cols_with_missing.index)
         suggested = [
             "Show summary statistics for numeric columns",
             f"What is the distribution of {numeric_cols[0]}?" if numeric_cols else "List all columns",
             "What are the most frequent categories?",
         ]
-        return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested}
+        return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested, "evidence_cols": ev_cols}
 
     # 4. Average / Mean query
     if any(k in q for k in ["average", "mean", "avg"]):
@@ -152,7 +155,7 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
                 f"What is the minimum {matched_num_col}?",
                 "What is the correlation between numeric columns?",
             ]
-            return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested}
+            return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested, "evidence_cols": [matched_num_col]}
         elif numeric_cols:
             means = {col: round(df[col].mean(), 2) for col in numeric_cols}
             summary_lines = "\n".join([f"- **`{col}`**: {val:,.2f}" for col, val in means.items()])
@@ -166,7 +169,7 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
                 f"What is the distribution of {numeric_cols[0]}?",
                 "Which column has missing values?",
             ]
-            return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested}
+            return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested, "evidence_cols": numeric_cols}
 
     # 5. Maximum / Highest queries
     if any(k in q for k in ["maximum", "max", "highest", "top", "greatest", "peak"]):
@@ -189,7 +192,7 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
                 f"What is the average {matched_num_col}?",
                 "Show summary statistics",
             ]
-            return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested}
+            return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested, "evidence_cols": [matched_num_col]}
 
     # 6. Minimum / Lowest queries
     if any(k in q for k in ["minimum", "min", "lowest", "smallest", "bottom"]):
@@ -211,7 +214,7 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
                 f"What is the average {matched_num_col}?",
                 "Show missing values summary",
             ]
-            return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested}
+            return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested, "evidence_cols": [matched_num_col]}
 
     # 7. Correlation queries
     if any(k in q for k in ["correlation", "correlated", "relationship", "relate"]):
@@ -245,7 +248,7 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
                     f"What is the distribution of {top_c2}?",
                     "Show dataset summary",
                 ]
-                return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested}
+                return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested, "evidence_cols": [top_c1, top_c2]}
 
     # 8. Categorical distribution / breakdown queries
     if matched_cat_col:
@@ -270,7 +273,7 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
                 "What is the dataset summary?",
                 f"What is the average {numeric_cols[0]}?" if numeric_cols else "List all columns",
             ]
-            return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested}
+            return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested, "evidence_cols": [matched_cat_col]}
 
     # 9. General Summary / Default fallback
     summary_lines = [
@@ -299,4 +302,5 @@ def analyze_question(query: str, df: pd.DataFrame) -> Dict[str, Any]:
         "Which column has the highest missing values?",
         "What are the top correlations?",
     ]
-    return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested}
+    fallback_ev = (numeric_cols[:2] + cat_cols[:2]) if (numeric_cols or cat_cols) else all_cols[:4]
+    return {"query": query, "answer": answer, "insights": insights, "suggested_questions": suggested, "evidence_cols": fallback_ev}
